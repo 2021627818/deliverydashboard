@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('vehicle_number')->nullable();
             $table->foreignId('hub_id')->constrained('courierhubs', 'hub_id')->onUpdate('cascade')->nullable();
             $table->foreignId('user_id')->constrained('users', 'id')->onUpdate('cascade')->nullable();
+            $table->integer('current_run_number')->default(1);
             $table->timestamps();
         });
     }

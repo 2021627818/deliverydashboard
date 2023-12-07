@@ -18,7 +18,7 @@ class ProfileCourierController extends Controller
     public function edit(Request $request): View
     {
         
-        return view('profilecourier.edit', [
+        return view('profileCourier.edit', [
             'user' => $request->user(),
         ]);
     }
@@ -31,19 +31,17 @@ class ProfileCourierController extends Controller
     $user = auth()->user();
 
     $this->validate($request, [
-        //'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
-        // Add validation for new fields
         'first_name' => ['required', 'string', 'max:255'],
         'last_name' => ['required', 'string', 'max:255'],
         'phone_number' => ['required', 'string', 'max:20'],
         'vehicle_number' => ['required', 'string', 'max:20'],
+        // Add validation for new fields
     ]);
 
     $user->update($request->only('name', 'email'));
 
-    // Update customer_profiles data
-
+    // Create customer_profiles Informations if null
     if ($user->couriers == null){
         $user->couriers()->create([
             'first_name' => $request->input('first_name'),
@@ -53,6 +51,7 @@ class ProfileCourierController extends Controller
         ]);
     }
 
+    // Update customer_profiles Informations
     if ($user->couriers) {
         $user->couriers->update([
             'first_name' => $request->input('first_name'),

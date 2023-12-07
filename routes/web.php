@@ -23,30 +23,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('/dashboard', function () {
-    //return view('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
-
-//Route::get('/dashboardcourier', function () {
-//    return view('dashboardcourier');
-//})->middleware(['auth', 'verified'])->name('dashboardcourier');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile/address', [ProfileController::class, 'addressupdate'])->name('profile.addressupdate');
+    Route::patch('/profile/address', [ProfileController::class, 'addressupdate'])->name('profile.addressUpdate');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/profilecourier', [ProfileCourierController::class, 'edit'])->name('profilecourier.edit');
-    Route::patch('/profilecourier', [ProfileCourierController::class, 'update'])->name('profilecourier.update');
-    Route::delete('/profilecourier', [ProfileCourierController::class, 'destroy'])->name('profilecourier.destroy');
+    Route::get('/profile-courier', [ProfileCourierController::class, 'edit'])->name('profileCourier.edit');
+    Route::patch('/profile-courier', [ProfileCourierController::class, 'update'])->name('profileCourier.update');
+    Route::delete('/profile-courier', [ProfileCourierController::class, 'destroy'])->name('profileCourier.destroy');
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/details/{orderId}', [OrderController::class, 'details'])->name('orders.details');
     Route::get('/dashboard', [OrderController::class, 'recentOrders'])->middleware(['auth', 'verified'])->name('dashboard');
-    Route::get('/orders/allcustomerorders', [OrderController::class, 'allCustomerOrders'])->name('orders.allcustomercorders');
-    Route::get('/dashboardcourier', [CourierOrderController::class, 'ocactive'])->middleware(['auth', 'verified'])->name('dashboardcourier');
-    Route::get('/ordercouriers/ocdetails/{orderId}', [CourierOrderController::class, 'ocdetails'])->name('ordercouriers.ocdetails');
-    Route::POST('/delivery/updateStatus/{orderID}', [DeliveryController::class, 'updateStatus'])->name('ordercouriers.updateStatus');
+    Route::get('/orders/all-orders', [OrderController::class, 'allOrders'])->name('orders.allOrders');
+    Route::get('/dashboard-courier', [CourierOrderController::class, 'active'])->middleware(['auth', 'verified'])->name('dashboardCourier');
+    Route::get('/order-couriers/details/{orderId}', [CourierOrderController::class, 'details'])->name('orderCouriers.details');
+    Route::POST('/delivery/update-status/{orderID}', [DeliveryController::class, 'updateStatus'])->name('delivery.updateStatus');
 });
 
 

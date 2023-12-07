@@ -19,7 +19,6 @@ class orders extends Model
         'parcel_length',
         'parcel_width',
         'parcel_height',
-        'order_date',
         'next_hub_id',
     ];
 
@@ -36,18 +35,18 @@ class orders extends Model
         return $this->hasOne(customer_profiles::class, 'customer_id');
     }
 
-    public function courierhubs()
+    public function courier_hubs()
     {
-        return $this->hasOne(courierhubs::class, 'hub_id');
+        return $this->hasOne(courier_hubs::class, 'hub_id');
     }
 
     public function couriers()
     {
-        return $this->belongsTo(Couriers::class, 'courier_id');
+        return $this->belongsTo(couriers::class, 'courier_id');
     }
 
-    public function orderstatus()
+    public function order_status()
     {
-        return $this->hasMany(orderstatus::class, 'order_id');
+        return $this->hasMany(order_status::class, 'order_id');
     }
 }

@@ -29,6 +29,6 @@ class recipients extends Model
     // Define relationships
     public function order()
     {
-        return $this->belongsTo(Orders::class, 'order_id');
+        return $this->belongsTo(orders::class, 'order_id');
     }
 }

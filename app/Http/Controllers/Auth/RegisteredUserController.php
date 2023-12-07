@@ -36,11 +36,13 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Create user (customer)
         $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
+        // Create customer profiles by default to null value
         $user->customer_profiles()->create([
             'first_name' => null,
             'last_name' => null,

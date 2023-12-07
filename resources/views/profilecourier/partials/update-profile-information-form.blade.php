@@ -13,7 +13,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profilecourier.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profileCourier.update') }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 

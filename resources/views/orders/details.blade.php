@@ -67,7 +67,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($orders->orderstatus as $status)
+                                @foreach($orders->order_status as $status)
                                 <tr>
                                     <td>{{ $status->updated_at }}</td>
                                     <td>{{ $status->status }}</td>

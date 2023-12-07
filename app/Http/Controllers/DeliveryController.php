@@ -8,10 +8,10 @@ use App\Models\orders;
 use App\Models\recipients;
 use App\Models\customer_profiles;
 use App\Models\customer_address;
-use App\Models\postalcodes;
+use App\Models\postal_codes;
 use App\Models\couriers;
-use App\Models\courierhubs;
-use App\Model\orderstatus;
+use App\Models\courier_hubs;
+use App\Models\order_status;
 use App\Http\Controllers\OrderController;
 
 class DeliveryController extends Controller
@@ -32,11 +32,11 @@ class DeliveryController extends Controller
 
         // Assign the courier to the order and update other order details
         $orders->courier_id = $couriers->courier_id;
-        //$orders->status = $orders->start_hub_id === $orders->end_hub_id ? 'In Transit' : 'At Sorting Center';
+        
         $orders->save();
 
-        $courierHub = courierhubs::find($orders->next_hub_id);
-        $orders->orderstatus()->create([
+        $courierHub = courier_hubs::find($orders->next_hub_id);
+        $orders->order_status()->create([
             'status' => 'Order Created',
             'next_stop' => $courierHub->hub_city. ' HUB',
             'order_id' => $orders->order_id
@@ -46,14 +46,14 @@ class DeliveryController extends Controller
     public function updateStatus(Request $request, $orderID)
     {
 
-        $orders = orders::with('recipients', 'orderstatus')->find($orderID);
+        $orders = orders::with('recipients', 'order_status')->find($orderID);
         $selectedOption = $request->input('dropdown');
 
 
         switch ($selectedOption) {
             case 'one':
-                $courierHub = courierhubs::find($orders->next_hub_id);
-                $orders->orderstatus()->create([
+                $courierHub = courier_hubs::find($orders->next_hub_id);
+                $orders->order_status()->create([
                 'status' => 'Order Picked Up by Courier',
                 'next_stop' => $courierHub->hub_city. ' HUB',
                 'order_id' => $orderID
@@ -62,7 +62,7 @@ class DeliveryController extends Controller
 
             case 'two':
 
-                $courierHub = courierhubs::find($orders->next_hub_id); // Assuming hub_id is the foreign key in the orders table
+                $courierHub = courier_hubs::find($orders->next_hub_id); // Assuming hub_id is the foreign key in the orders table
 
                 if ($courierHub) {
                     $hubCity = $courierHub->hub_city;
@@ -71,7 +71,7 @@ class DeliveryController extends Controller
                     $this->assignHubCourier($orders);
                     
                     if ($orders->next_hub_id === $orders->end_hub_id){
-                        $orders->orderstatus()->create([
+                        $orders->order_status()->create([
                         'status' => $status,
                         'next_stop' => 'Deliver to Recipient',
                         'order_id' => $orderID
@@ -79,7 +79,7 @@ class DeliveryController extends Controller
                     }
 
                     else {
-                        $orders->orderstatus()->create([
+                        $orders->order_status()->create([
                             'status' => $status,
                             'next_stop' => 'Sorting Center',
                             'order_id' => $orderID
@@ -92,8 +92,7 @@ class DeliveryController extends Controller
                 break;
 
             case 'three':
-                //$courierHub = courierhubs::find($orders->next_hub_id);
-                $orders->orderstatus()->create([
+                $orders->order_status()->create([
                 'status' => 'Order Out For Delivery',
                 'next_stop' => 'Deliver to Recipient',
                 'order_id' => $orderID
@@ -101,8 +100,7 @@ class DeliveryController extends Controller
                 break;
 
             case 'four':
-                //$courierHub = courierhubs::find($orders->next_hub_id);
-                $orders->orderstatus()->create([
+                $orders->order_status()->create([
                 'status' => 'In Transit',
                 'next_stop' => 'Sorting Center',
                 'order_id' => $orderID
@@ -110,8 +108,8 @@ class DeliveryController extends Controller
                 break;
                 
             case 'five':
-                $courierHub = courierhubs::find($orders->next_hub_id);
-                $orders->orderstatus()->create([
+                $courierHub = courier_hubs::find($orders->next_hub_id);
+                $orders->order_status()->create([
                 'status' => 'Order Arrived at Sorting Center',
                 'next_stop' => $courierHub->hub_city. ' HUB',
                 'order_id' => $orderID
@@ -124,8 +122,8 @@ class DeliveryController extends Controller
                 break;
 
             case 'six':
-                $courierHub = courierhubs::find($orders->next_hub_id);
-                $orders->orderstatus()->create([
+                $courierHub = courier_hubs::find($orders->next_hub_id);
+                $orders->order_status()->create([
                 'status' => 'In Transit',
                 'next_stop' => $courierHub->hub_city. ' HUB',
                 'order_id' => $orderID
@@ -133,7 +131,7 @@ class DeliveryController extends Controller
                 break;
 
             case 'seven':
-                $orders->orderstatus()->create([
+                $orders->order_status()->create([
                     'status' => 'Delivered',
                     'next_stop' => null,
                     'order_id' => $orderID
@@ -141,8 +139,8 @@ class DeliveryController extends Controller
                 break;
 
             case 'eight':
-                $courierHub = courierhubs::find($orders->next_hub_id);
-                $orders->orderstatus()->create([
+                $courierHub = courier_hubs::find($orders->next_hub_id);
+                $orders->order_status()->create([
                     'status' => 'Delivery attemp was unsuccessful',
                     'next_stop' => $courierHub->hub_city. ' HUB',
                     'order_id' => $orderID
@@ -156,7 +154,7 @@ class DeliveryController extends Controller
         }
         
 
-        return redirect()->route('dashboardcourier');
+        return redirect()->route('dashboardCourier');
     }
 
     private function courierRotation(orders $orders)
@@ -201,8 +199,7 @@ class DeliveryController extends Controller
 
     private function assignHubCourier(orders $orders)
     {
-        //$courierHub = courierhubs::find($orders->start_hub_id); // Assuming hub_id is the foreign key in the orders table
-
+        // Logic to assign courier based on conditions
         if ($orders->end_hub_id === $orders->next_hub_id){
             $this->courierRotation($orders);
         }
@@ -210,54 +207,5 @@ class DeliveryController extends Controller
         else{
             $this->courierRotation2($orders);
         }
-    }
-
-    private function assignHubCourier2(orders $orders)
-    {
-        // Logic to assign courier based on conditions
-        if ($orders->start_hub_id === $orders->end_hub_id) {
-            // Condition 1: Same start_hub_id and end_hub_id
-            $couriers = couriers::where('hub_id', $orders->end_hub_id)->firstOrFail();
-            $totalCouriers = couriers::where('hub_id', $orders->end_hub_id)->count();
-
-            // Get the next run number and update the database
-            $runNumber = $couriers->getNextRunNumber();
-
-            // Calculate the index of the record to retrieve
-            $index = ($runNumber - 1) % $totalCouriers;
-
-            // Retrieve the courier based on the calculated index
-            $couriers = couriers::where('hub_id', $orders->end_hub_id)->skip($index)->take(1)->first();
-
-            // Assign the courier to the order and update other order details
-            $orders->courier_id = $couriers->courier_id;
-            //$orders->status = $orders->start_hub_id === $orders->end_hub_id ? 'In Transit' : 'At Sorting Center';
-            $orders->save();
-
-        }
-
-        else {
-
-            $couriers = couriers::where('hub_id', 9999)->first();
-
-            // Assign the courier to the order and update other order details
-            $orders->courier_id = $couriers->courier_id;
-            $orders->save();
-
-        }
-
-        $orders->orderstatus()->create([
-            'status' => 'Order Created',
-            'order_id' => $orders->order_id
-        ]);
-
-
-        // Redirect to a success page or do whatever is necessary
-        return redirect()->route('dashboard')->with('success', 'Order created successfully');
-
-        
-        // Logic to assign a courier to the order
-        // You can reuse the existing logic from the assignCourier method
-        //$this->assignCourier($order);
     }
 }

@@ -18,10 +18,10 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::get('registercourier', [RegisteredCourierController::class, 'create'])
-                ->name('registercourier');
+    Route::get('register-courier', [RegisteredCourierController::class, 'create'])
+                ->name('register-courier');
 
-    Route::post('registercourier', [RegisteredCourierController::class, 'store']);
+    Route::post('register-courier', [RegisteredCourierController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');

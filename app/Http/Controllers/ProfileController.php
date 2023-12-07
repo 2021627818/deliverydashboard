@@ -32,18 +32,16 @@ class ProfileController extends Controller
     $user = auth()->user();
 
     $this->validate($request, [
-        //'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
-        // Add validation for new fields
         'first_name' => ['required', 'string', 'max:255'],
         'last_name' => ['required', 'string', 'max:255'],
         'phone_number' => ['required', 'string', 'max:20'],
+        // Add validation for new fields
     ]);
 
     $user->update($request->only('name', 'email'));
 
-    // Update customer_profiles data
-
+    // Create customer_profiles informations if null
     if ($user->customer_profiles == null){
         $user->customer_profiles()->create([
             'first_name' => $request->input('first_name'),
@@ -52,6 +50,7 @@ class ProfileController extends Controller
         ]);
     }
 
+    // Update customer_profiles informations
     if ($user->customer_profiles) {
         $user->customer_profiles->update([
             'first_name' => $request->input('first_name'),
@@ -63,22 +62,21 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    public function addressupdate(Request $request)
+    public function addressUpdate(Request $request)
 {
     $user = auth()->user();
 
     $this->validate($request, [
-        // Add validation for new fields
         'address_line1' => ['required', 'string', 'max:255'],
         'address_line2' => ['required', 'string', 'max:255'],
         'postal_code' => ['required', 'string', 'max:6'],
         'city' => ['required', 'string', 'max:255'],
         'state' => ['required', 'string', 'max:255'],
         'country' => ['required', 'string', 'max:255'],
+        // Add validation for new fields
     ]);
 
-    // Update customer_address data
-
+    // Create customer_address Informations if null
     if ($user->customer_profiles->customer_address == null){
         $user->customer_profiles->customer_address()->create([
             'address_line1' => $request->input('address_line1'),
@@ -90,6 +88,7 @@ class ProfileController extends Controller
         ]);
     }
 
+    // Update customer_address Informations
     if ($user->customer_profiles->customer_address) {
         $user->customer_profiles->customer_address->update([
             'address_line1' => $request->input('address_line1'),

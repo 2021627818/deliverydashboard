@@ -13,7 +13,7 @@
                     {{ __("You're logged in!") }}
                 </div>
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @include('orders.recentorders')
+                    @include('orders.recent-orders')
                 </div>
             </div>
         </div>

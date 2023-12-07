@@ -10,15 +10,16 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id('order_id');
-            $table->date('order_date')->nullable();
             $table->string('descriptions')->nullable();
             $table->string('parcel_weight')->nullable();
             $table->string('parcel_length')->nullable();
             $table->string('parcel_width')->nullable();
             $table->string('parcel_height')->nullable();
             $table->foreignId('customers_id')->constrained('customer_profiles', 'customer_id')->onUpdate('cascade')->nullable();
+            $table->foreignId('courier_id')->constrained('couriers', 'courier_id')->onUpdate('cascade')->nullable();
             $table->foreignId('start_hub_id')->constrained('courierhubs', 'hub_id')->onUpdate('cascade')->nullable();
             $table->foreignId('end_hub_id')->constrained('courierhubs', 'hub_id')->onUpdate('cascade')->nullable();
+            $table->foreignId('next_hub_id')->constrained('courierhubs', 'hub_id')->onUpdate('cascade')->nullable();
             $table->timestamps();
         });
     }

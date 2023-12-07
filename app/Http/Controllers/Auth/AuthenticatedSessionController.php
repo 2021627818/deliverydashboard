@@ -32,11 +32,10 @@ class AuthenticatedSessionController extends Controller
         $user = auth()->user();
         
         if ($user->customer_profiles) {
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard'); // Redirect to Customer Dashboard
         } elseif ($user->couriers) {
-            return redirect()->route('dashboardcourier');
+            return redirect()->route('dashboardCourier'); // Redirect to Courier Dashboard
         }
-        //return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**

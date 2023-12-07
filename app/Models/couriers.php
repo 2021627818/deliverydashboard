@@ -23,14 +23,14 @@ class couriers extends Model
         return $this->hasOne(Users::class, 'user_id');
     }
     
-    public function courierhubs()
+    public function courier_hubs()
     {
-        return $this->belongsTo(CourierHubs::class, 'hub_id');
+        return $this->belongsTo(courier_hubs::class, 'hub_id');
     }
 
     public function orders()
     {
-        return $this->hasMany(Orders::class, 'courier_id');
+        return $this->hasMany(orders::class, 'courier_id');
     }
 
     public function getNextRunNumber()

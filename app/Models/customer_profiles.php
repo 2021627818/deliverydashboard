@@ -28,6 +28,6 @@ class customer_profiles extends Model
 
     public function order()
     {
-        return $this->hasMany(Orders::class, 'customer_id');
+        return $this->hasMany(orders::class, 'customer_id');
     }
 }

@@ -21,7 +21,7 @@ class RegisteredCourierController extends Controller
      */
     public function create(): View
     {
-        return view('auth.registercourier');
+        return view('auth.register-courier');
     }
 
     /**
@@ -36,11 +36,13 @@ class RegisteredCourierController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Create user (courier)
         $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
+        // Create courier profiles by default to null value
         $user->couriers()->create([
             'first_name' => null,
             'last_name' => null,
@@ -52,6 +54,6 @@ class RegisteredCourierController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboardcourier');
+        return redirect()->route('dashboard-courier');
     }
 }
