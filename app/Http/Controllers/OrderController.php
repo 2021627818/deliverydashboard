@@ -74,15 +74,17 @@ class OrderController extends Controller
         
         $postalcodes = postalcodes::where('postal_code', $user->customer_profiles->customer_address->postal_code)->first();
         $orders->start_hub_id = $postalcodes->hub_id;
+        $orders->next_hub_id = $postalcodes->hub_id;
 
         $postalcodes = postalcodes::where('postal_code', $orders->recipients->recipient_postal_code)->first();
         $orders->end_hub_id = $postalcodes->hub_id;
+
 
         $orders->save();
 
         // Call the assignCourier method from the DeliveryController
         $deliveryController = new DeliveryController();
-        $deliveryController->assignCourier($orders);
+        $deliveryController->assignPickupCourier($orders);
 
         // Redirect to a success page or do whatever is necessary
         return redirect()->route('dashboard')->with('success', 'Order created successfully');
@@ -116,7 +118,7 @@ class OrderController extends Controller
                         ->limit(1);
                 });
         })
-        ->where('orders.customer_id', auth()->user()->customer_profiles->user_id)
+        ->where('orders.customer_id', auth()->user()->customer_profiles->customer_id)
         ->orderBy('orders.order_id', 'desc')
         ->take(10)
         ->get();

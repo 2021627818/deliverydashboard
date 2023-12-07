@@ -47,8 +47,16 @@
                 <option value="1" {{ old('hub_id', optional($user->couriers)->hub_id) == 1 ? 'selected' : ''}}>Shah Alam</option>
                 <option value="2" {{ old('hub_id', optional($user->couriers)->hub_id) == 2 ? 'selected' : ''}}>Klang</option>
                 <option value="3" {{ old('hub_id', optional($user->couriers)->hub_id) == 3 ? 'selected' : ''}}>Banting</option>
+                <option value="4" {{ old('hub_id', optional($user->couriers)->hub_id) == 4 ? 'selected' : ''}}>Kajang</option>
+                <option value="5" {{ old('hub_id', optional($user->couriers)->hub_id) == 5 ? 'selected' : ''}}>Bangi</option>
+                <option value="6" {{ old('hub_id', optional($user->couriers)->hub_id) == 6 ? 'selected' : ''}}>Sepang</option>
+                <option value="7" {{ old('hub_id', optional($user->couriers)->hub_id) == 7 ? 'selected' : ''}}>Sabak Bernam</option>
+                <option value="8" {{ old('hub_id', optional($user->couriers)->hub_id) == 8 ? 'selected' : ''}}>Petaling Jaya</option>
+                <option value="9" {{ old('hub_id', optional($user->couriers)->hub_id) == 9 ? 'selected' : ''}}>Subang Jaya</option>
+                <option value="10" {{ old('hub_id', optional($user->couriers)->hub_id) == 10 ? 'selected' : ''}}>Rawang</option>
+                <option value="11" {{ old('hub_id', optional($user->couriers)->hub_id) == 11 ? 'selected' : ''}}>Cyberjaya</option>
+                <option value="9999" {{ old('hub_id', optional($user->couriers)->hub_id) == 9999 ? 'selected' : ''}}>Selangor Sorting Center</option>
             </select>
-
         </div>
 
         <div>

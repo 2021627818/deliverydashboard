@@ -16,6 +16,7 @@ class orderstatus extends Model
     protected $fillable = [
         'status',
         'order_id',
+        'next_stop'
     ];
 
     public $timestamps = true;

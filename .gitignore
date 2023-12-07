@@ -17,3 +17,16 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+*.php
+resources/views/components/courier-layout.blade.php
+routes/web.php
+app/Http/Controllers/DeliveryController.php
+app/Http/Controllers/OrderController.php
+app/Models/orders.php
+app/Models/orderstatus.php
+resources/views/components/courier-layout.blade.php
+resources/views/dashboardcourier.blade.php
+resources/views/layouts/courier-navigation.blade.php
+resources/views/profilecourier/partials/update-profile-information-form.blade.php
+resources/views/welcome.blade.php
+routes/web.php

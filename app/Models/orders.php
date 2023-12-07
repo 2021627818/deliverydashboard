@@ -20,6 +20,7 @@ class orders extends Model
         'parcel_width',
         'parcel_height',
         'order_date',
+        'next_hub_id',
     ];
 
     //public $timestamps = true;

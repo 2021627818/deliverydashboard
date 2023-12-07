@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileCourierController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\CourierOrderController;
 use Illuminate\Support\Facades\Route;
 use App\Models\orders;
 
@@ -25,9 +27,9 @@ Route::get('/', function () {
     //return view('dashboard');
 //})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboardcourier', function () {
-    return view('dashboardcourier');
-})->middleware(['auth', 'verified'])->name('dashboardcourier');
+//Route::get('/dashboardcourier', function () {
+//    return view('dashboardcourier');
+//})->middleware(['auth', 'verified'])->name('dashboardcourier');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -42,6 +44,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/details/{orderId}', [OrderController::class, 'details'])->name('orders.details');
     Route::get('/dashboard', [OrderController::class, 'recentOrders'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/orders/allcustomerorders', [OrderController::class, 'allCustomerOrders'])->name('orders.allcustomercorders');
+    Route::get('/dashboardcourier', [CourierOrderController::class, 'ocactive'])->middleware(['auth', 'verified'])->name('dashboardcourier');
+    Route::get('/ordercouriers/ocdetails/{orderId}', [CourierOrderController::class, 'ocdetails'])->name('ordercouriers.ocdetails');
+    Route::POST('/delivery/updateStatus/{orderID}', [DeliveryController::class, 'updateStatus'])->name('ordercouriers.updateStatus');
 });
 
 
