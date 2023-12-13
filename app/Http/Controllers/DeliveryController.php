@@ -39,7 +39,7 @@ class DeliveryController extends Controller
         $orders->order_status()->create([
             'status' => 'Order Created',
             'next_stop' => $courierHub->hub_city. ' HUB',
-            'order_id' => $orders->order_id
+            'order_id' => $orders->order_id,
         ]);
     }
 
@@ -48,6 +48,7 @@ class DeliveryController extends Controller
 
         $orders = orders::with('recipients', 'order_status')->find($orderID);
         $selectedOption = $request->input('dropdown');
+        $tempCourier = auth()->user()->couriers->courier_id;
 
 
         switch ($selectedOption) {
@@ -56,12 +57,14 @@ class DeliveryController extends Controller
                 $orders->order_status()->create([
                 'status' => 'Order Picked Up by Courier',
                 'next_stop' => $courierHub->hub_city. ' HUB',
-                'order_id' => $orderID
+                'order_id' => $orderID,
+                'courier_id' => $tempCourier,
+                'courier_status' => 'Pick up Order from Customer'
                 ]);
+                
                 break;
 
             case 'two':
-
                 $courierHub = courier_hubs::find($orders->next_hub_id); // Assuming hub_id is the foreign key in the orders table
 
                 if ($courierHub) {
@@ -74,7 +77,9 @@ class DeliveryController extends Controller
                         $orders->order_status()->create([
                         'status' => $status,
                         'next_stop' => 'Deliver to Recipient',
-                        'order_id' => $orderID
+                        'order_id' => $orderID,
+                        'courier_id' => $tempCourier,
+                        'courier_status' => "Drop Order at $hubCity HUB"
                         ]);
                     }
 
@@ -82,7 +87,9 @@ class DeliveryController extends Controller
                         $orders->order_status()->create([
                             'status' => $status,
                             'next_stop' => 'Sorting Center',
-                            'order_id' => $orderID
+                            'order_id' => $orderID,
+                            'courier_id' => $tempCourier,
+                            'courier_status' => "Drop Order at $hubCity HUB"
                             ]);
                     }    
                 }
@@ -95,7 +102,9 @@ class DeliveryController extends Controller
                 $orders->order_status()->create([
                 'status' => 'Order Out For Delivery',
                 'next_stop' => 'Deliver to Recipient',
-                'order_id' => $orderID
+                'order_id' => $orderID,
+                'courier_id' => $tempCourier,
+                'courier_status' => 'Picked Up Order for Delivery to Recipient'
                 ]);
                 break;
 
@@ -103,7 +112,9 @@ class DeliveryController extends Controller
                 $orders->order_status()->create([
                 'status' => 'In Transit',
                 'next_stop' => 'Sorting Center',
-                'order_id' => $orderID
+                'order_id' => $orderID,
+                'courier_id' => $tempCourier,
+                'courier_status' => 'Picked Up Order for Deliver to Sorting Center'
                 ]);
                 break;
                 
@@ -112,7 +123,9 @@ class DeliveryController extends Controller
                 $orders->order_status()->create([
                 'status' => 'Order Arrived at Sorting Center',
                 'next_stop' => $courierHub->hub_city. ' HUB',
-                'order_id' => $orderID
+                'order_id' => $orderID,
+                'courier_id' => $tempCourier,
+                'courier_status' => 'Drop Order at Sortng Center'
                 ]);
 
                 $orders->next_hub_id = $orders->start_hub_id;
@@ -126,7 +139,9 @@ class DeliveryController extends Controller
                 $orders->order_status()->create([
                 'status' => 'In Transit',
                 'next_stop' => $courierHub->hub_city. ' HUB',
-                'order_id' => $orderID
+                'order_id' => $orderID,
+                'courier_id' => $tempCourier,
+                'courier_status' => 'Picked Up Order from Sortng Center'
                 ]);
                 break;
 
@@ -134,7 +149,9 @@ class DeliveryController extends Controller
                 $orders->order_status()->create([
                     'status' => 'Delivered',
                     'next_stop' => null,
-                    'order_id' => $orderID
+                    'order_id' => $orderID,
+                    'courier_id' => $tempCourier,
+                    'courier_status' => 'Delivered Order to Recipient'
                 ]);
                 break;
 
@@ -143,7 +160,9 @@ class DeliveryController extends Controller
                 $orders->order_status()->create([
                     'status' => 'Delivery attemp was unsuccessful',
                     'next_stop' => $courierHub->hub_city. ' HUB',
-                    'order_id' => $orderID
+                    'order_id' => $orderID,
+                    'courier_id' => $tempCourier,
+                    'courier_status' => 'Delivery attemp was unsuccessful'
                 ]);
                 break;
             // Add more cases if needed

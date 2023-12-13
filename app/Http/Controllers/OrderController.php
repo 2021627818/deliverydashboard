@@ -130,6 +130,17 @@ class OrderController extends Controller
         ->orderBy('orders.order_id', 'desc')
         ->get();
 
-        return view('orders.allOrders', compact('allOrders'));
+        return view('/orders/all-Orders', compact('allOrders'));
+    }
+
+    public function guestTracking(Request $request)
+    {
+        $orderId = $request->input('order_id');
+
+        // Perform the search based on order_id
+        $orders = orders::with('order_status')->find($orderId);
+
+        return view('orders.guest-tracking', compact('orders'));
+
     }
 }

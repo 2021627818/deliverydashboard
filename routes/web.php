@@ -36,10 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/details/{orderId}', [OrderController::class, 'details'])->name('orders.details');
     Route::get('/dashboard', [OrderController::class, 'recentOrders'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/orders/all-orders', [OrderController::class, 'allOrders'])->name('orders.allOrders');
-    Route::get('/dashboard-courier', [CourierOrderController::class, 'active'])->middleware(['auth', 'verified'])->name('dashboardCourier');
+    Route::get('/dashboard-courier', [CourierOrderController::class, 'dashboardView'])->middleware(['auth', 'verified'])->name('dashboardCourier');
     Route::get('/order-couriers/details/{orderId}', [CourierOrderController::class, 'details'])->name('orderCouriers.details');
     Route::POST('/delivery/update-status/{orderID}', [DeliveryController::class, 'updateStatus'])->name('delivery.updateStatus');
-});
+    Route::get('/order-couriers/logs', [CourierOrderController::class, 'courierLogs'])->name('orderCouriers.courierLogs');
+    //Route::get('/orders/guest-tracking',[OrderController::class, 'guestTracking'])->name('orders.guest-tracking');
+}); 
 
 
 
